@@ -1,0 +1,326 @@
+﻿<Window x:Class="WpfApp1.masterWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfApp1"
+        mc:Ignorable="d"
+        Title="masterWindow" Height="720" Width="1360" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid>
+        <Button Content="Выйти" FontSize="18" Canvas.Left="75" Canvas.Top="36" Click="ButtonClickLogout" Margin="1202,10,9.6,640.4"/>
+        <Canvas x:Name="mainMaster" Visibility="Collapsed" HorizontalAlignment="Center" Height="690" Margin="-3,0,-3.4,0.4" VerticalAlignment="Center" Width="1360">
+            <Label Content="Заявки" Height="49" Canvas.Left="94" Canvas.Top="42" Width="376"
+                   HorizontalContentAlignment="Left" FontSize="32" />
+            <DataGrid x:Name="DataGridApplication" AutoGenerateColumns="false" Height="249" Canvas.Left="94" Canvas.Top="91" 
+                      Width="1200" IsReadOnly="True" RowHeaderWidth="0" SelectionUnit="FullRow" FontSize="14">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=Id}" Header="Номер" MinWidth="60" MaxWidth="60" />
+                    <DataGridTextColumn Binding="{Binding Path=getClient}" Header="Клиент"  MinWidth="300" MaxWidth="300" />
+                    <DataGridTextColumn Binding="{Binding Path=getCar}" Header="Автомобиль"  MinWidth="200" MaxWidth="200" />
+                    <DataGridTextColumn Binding="{Binding Path=Comment}" Header="Комментарии"  MinWidth="490" MaxWidth="490" />
+                    <DataGridTextColumn Binding="{Binding Path=Status}" Header="Статус"  MinWidth="150" MaxWidth="150" />
+                </DataGrid.Columns>
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="Row_DoubleClick"/>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+            <Button Content="Добавить заявку" FontSize="18" Height="36" Canvas.Left="94" Canvas.Top="345" Width="212" Click="ButtonClickAddApplication"/>
+            <ComboBox x:Name="cbSortMain" FontSize="12" VerticalContentAlignment="Center" Height="36" Canvas.Left="350" Canvas.Top="345" Width="203" SelectionChanged="cbSortMain_SelectionChanged"/>
+            <Label IsHitTestVisible="False" FontSize="14" Content="Фильтр" Height="30" Canvas.Left="356" Canvas.Top="348" Width="68" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=cbSortMain}" Value="-1">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <TextBox x:Name="tbClientMain" Height="33" Canvas.Left="580" Canvas.Top="348" Width="200" Padding="4 0 0 0" FontSize="14" Text=""
+                     VerticalContentAlignment="Center" TextWrapping="Wrap" MaxLength="11" PreviewTextInput="OnlyNumber" 
+                     TextChanged="CheckInput" Visibility="Collapsed" />
+            <Label x:Name="lbClientMainWtM" Visibility="Collapsed" IsHitTestVisible="False" FontSize="14" Content="Телефон" 
+                   Height="30" Canvas.Left="711" Canvas.Top="349" Width="68" Foreground="#FFB1B1B1" />
+            <TextBox x:Name="tbCarMain" Visibility="Collapsed" Height="33" Canvas.Left="580" Canvas.Top="348" Width="200" Padding="4 0 0 0" FontSize="13" 
+                     VerticalContentAlignment="Center" MaxLength="9" PreviewTextInput="NumberCar" TextChanged="CheckInput" Text=""/>
+            <Label x:Name="lbCarMainWtM" Visibility="Collapsed" IsHitTestVisible="False" FontSize="14" 
+                   Content="Гос. номер" Height="28" Canvas.Left="698" Canvas.Top="350" Width="83" Foreground="#FFB1B1B1"/>
+            <DatePicker x:Name="dpMain" Height="34" Canvas.Left="580" Canvas.Top="347" Width="200" VerticalContentAlignment="Center" 
+                        FontSize="14" Visibility="Collapsed" Focusable="False"/>
+            <ComboBox x:Name="cbStatusMain" FontSize="12" Visibility="Collapsed" VerticalContentAlignment="Center" Height="36" Canvas.Left="580" Canvas.Top="345" Width="200"/>
+            <Button Content="Выполнить" FontSize="18" Height="28" Canvas.Left="350" Canvas.Top="386" Width="204" Click="ButtonClickSortApplication"/>
+        </Canvas>
+        <Canvas x:Name="FormAddApplication" Visibility="Collapsed" HorizontalAlignment="Center" Height="690" Margin="-3,0,-3.4,0.4" VerticalAlignment="Center" Width="1360">
+            <Label Content="Создание заявки" Height="49" Canvas.Left="479" Canvas.Top="110" Width="376"
+                   HorizontalContentAlignment="Center" FontSize="32" BorderThickness="0 0 0 2" BorderBrush="Black"/>
+            <TextBox x:Name="tbTelAddApplication" Height="28" Canvas.Left="478" Canvas.Top="204" Padding="2.5 0 0 0" FontSize="12" 
+                     Width="184" VerticalContentAlignment="Center" TextWrapping="Wrap" MaxLength="11" PreviewTextInput="OnlyNumber" 
+                     TextChanged="CheckInput"/>
+            <Label x:Name="lbClientAddApplication" Content="Клиент" Height="27" Canvas.Left="478" Canvas.Top="177" Width="376"/>
+            <Label IsHitTestVisible="False" Content="Телефон" Height="27" Canvas.Left="478" Canvas.Top="204" Width="61" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbTelAddApplication}" Value="">
+                                <Setter Property="Visibility" Value="Visible"></Setter>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Button Content="Новый клиент" Height="28" Canvas.Left="747" Canvas.Top="204" Width="107" Click="ButtonClickAddClient"/>
+            <Button Content="Найти" Height="28" Canvas.Left="670" Canvas.Top="204" Width="70" Click="ButtonClickSearchClient"/>
+            <TextBox x:Name="tbCarAddApplication" Height="28" Canvas.Left="478" Canvas.Top="269" Padding="2.5 0 0 0" FontSize="12" 
+                Width="184" VerticalContentAlignment="Center" MaxLength="9" PreviewTextInput="NumberCar" TextChanged="CheckInput"/>
+            <Label x:Name="lbCarAddApplication" Content="Автомобиль" Height="27" Canvas.Left="478" Canvas.Top="241" Width="376"/>
+            <Label IsHitTestVisible="False" Content="Гос. номер" Height="27" Canvas.Left="478" Canvas.Top="269" Width="90" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbCarAddApplication}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Button Content="Добавить" Height="28" Canvas.Left="747" Canvas.Top="269" Width="107" Click="ButtonClickAddCar"/>
+            <Button Content="Найти" Height="28" Canvas.Left="670" Canvas.Top="269" Width="70" Click="ButtonClickSearchCar"/>
+            <Label Content="Комментарии клиента" Height="27" Canvas.Left="478" Canvas.Top="302" Width="176"/>
+            <TextBox x:Name="tbCommentsAddApplication" VerticalScrollBarVisibility="Visible" Height="95" AcceptsReturn="True" Canvas.Left="479" TextWrapping="Wrap" Canvas.Top="329" Width="376" MaxLength="150"/>
+            <Button Content="Создать" Height="36" Canvas.Left="478" Canvas.Top="437" Width="184" Click="ButtonClickCreateAddApplication"/>
+            <Button Content="Назад" Height="36" Canvas.Left="670" Canvas.Top="437" Width="184" Click="ButtonClickCancelApplication"/>
+        </Canvas>
+        <Canvas x:Name="FormAddClient" Visibility="Collapsed" HorizontalAlignment="Center" Height="690" Margin="-3,0,-3.4,0.4" VerticalAlignment="Center" Width="1360">
+            <Label Content="Добавление клиента" Height="49" Canvas.Left="479" Canvas.Top="110" Width="376"
+                   HorizontalContentAlignment="Center" FontSize="32" BorderThickness="0 0 0 2" BorderBrush="Black"/>
+            <Label Content="Полное имя (ФИО)" Height="27" Canvas.Left="478" Canvas.Top="177" Width="176"/>
+            <TextBox x:Name="tbFNameAddClient" HorizontalAlignment="Center" Height="32" TextWrapping="Wrap" MaxLength="50" 
+                 Text="" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="376" FontSize="16" 
+                 BorderThickness="2px" Padding="11 0 0 0" Canvas.Left="479" Canvas.Top="204"/>
+            <Label IsHitTestVisible="False" VerticalContentAlignment="Center" Content="Введите полное имя..." FontSize="16" Height="32" Canvas.Left="487" Canvas.Top="204" Width="195" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbFNameAddClient}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Label Content="Телефон" Height="27" Canvas.Left="478" Canvas.Top="244" Width="176"/>
+            <TextBox x:Name="tbTelAddClient" HorizontalAlignment="Center" Height="32" TextWrapping="Wrap" MaxLength="11"
+                Text="" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="376" FontSize="16" 
+                BorderThickness="2px" Padding="11 0 0 0" Canvas.Left="479" Canvas.Top="271" PreviewTextInput="OnlyNumber"/>
+            <Label IsHitTestVisible="False" VerticalContentAlignment="Center" Content="Введите номер..." FontSize="16" Height="32" Canvas.Left="487" Canvas.Top="271" Width="178" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbTelAddClient}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Label Content="Адрес" Height="28" Canvas.Left="478" Canvas.Top="310" Width="176"/>
+            <TextBox x:Name="tbAddressAddClient" HorizontalAlignment="Center" Height="32" TextWrapping="Wrap" MaxLength="70"
+                Text="" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="376" FontSize="16" 
+                BorderThickness="2px" Padding="11 0 0 0" Canvas.Left="479" Canvas.Top="338"/>
+            <Label IsHitTestVisible="False" VerticalContentAlignment="Center" Content="Введите адрес..." FontSize="16" Height="32" Canvas.Left="487" Canvas.Top="338" Width="178" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbAddressAddClient}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Button Content="Создать" Height="42" Canvas.Left="567" Canvas.Top="391" Width="184" Click="ButtonClickCreateClient"/>
+            <Button Content="Назад" Height="42" Canvas.Left="35" Canvas.Top="27" Width="89" Click="ButtonClickCancelClient"/>
+        </Canvas>
+        <Canvas x:Name="FormAddCar" Visibility="Collapsed" HorizontalAlignment="Center" Height="690" Margin="-3,0,-3.4,0.4" VerticalAlignment="Center" Width="1360">
+            <Label Content="Добавление автомобиля" Height="49" Canvas.Left="479" Canvas.Top="110" Width="376"
+                   HorizontalContentAlignment="Center" FontSize="32" BorderThickness="0 0 0 2" BorderBrush="Black"/>
+            <Label Content="Государственый номер" Height="27" Canvas.Left="478" Canvas.Top="177" Width="176"/>
+            <TextBox x:Name="tbNumberAddCar" HorizontalAlignment="Center" Height="32" TextWrapping="Wrap" MinLines="1" MaxLength="9"
+                 Text="" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="376" FontSize="16" 
+                 BorderThickness="2px" Padding="11 0 0 0" Canvas.Left="479" Canvas.Top="204"/>
+            <Label IsHitTestVisible="False" VerticalContentAlignment="Center" Content="X999XX999" FontSize="16" Height="32" Canvas.Left="487" Canvas.Top="204" Width="195" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbNumberAddCar}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Label Content="Марка автомобиля" Height="27" Canvas.Left="478" Canvas.Top="244" Width="176"/>
+            <TextBox x:Name="tbMarkAddCar" HorizontalAlignment="Center" Height="32" TextWrapping="Wrap" MaxLength="20"
+                Text="" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="376" FontSize="16" 
+                BorderThickness="2px" Padding="11 0 0 0" Canvas.Left="479" Canvas.Top="271"/>
+            <Label IsHitTestVisible="False" VerticalContentAlignment="Center" Content="Введите марку..." FontSize="16" Height="32" Canvas.Left="487" Canvas.Top="271" Width="178" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbMarkAddCar}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Label Content="Модель" Height="28" Canvas.Left="478" Canvas.Top="310" Width="176"/>
+            <TextBox x:Name="tbModelAddCar" HorizontalAlignment="Center" Height="32" TextWrapping="Wrap" 
+                Text="" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="376" FontSize="16" MaxLength="20"
+                BorderThickness="2px" Padding="11 0 0 0" Canvas.Left="479" Canvas.Top="338"/>
+            <Label IsHitTestVisible="False" VerticalContentAlignment="Center" Content="Введите модель..." FontSize="16" Height="32" Canvas.Left="487" Canvas.Top="338" Width="178" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbModelAddCar}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Button Content="Добавить" Height="42" Canvas.Left="569" Canvas.Top="528" Width="184" Click="ButtonClickCreateCar"/>
+            <Button Content="Назад" Height="42" Canvas.Left="35" Canvas.Top="27" Width="89" Click="ButtonClickCancelСar"/>
+            <Label Content="Номер двигателя" Height="28" Canvas.Left="478" Canvas.Top="378" Width="176"/>
+            <TextBox x:Name="tbEngineAddCar" HorizontalAlignment="Center" Height="32" TextWrapping="Wrap" 
+                Text="" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="376" FontSize="16" 
+                BorderThickness="2px" Padding="11 0 0 0" Canvas.Left="479" Canvas.Top="406" MaxLength="17"/>
+            <Label IsHitTestVisible="False" VerticalContentAlignment="Center" Content="Введите номер двигателя..." FontSize="16" Height="32" Canvas.Left="487" Canvas.Top="406" Width="213" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbEngineAddCar}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Label Content="Номер кузова" Height="28" Canvas.Left="478" Canvas.Top="446" Width="176"/>
+            <TextBox x:Name="tbBodyAddCar" HorizontalAlignment="Center" Height="35" TextWrapping="Wrap" 
+                Text="" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="376" FontSize="16" 
+                BorderThickness="2px" Padding="11 0 0 0" Canvas.Left="479" Canvas.Top="475" MaxLength="17"/>
+            <Label IsHitTestVisible="False" VerticalContentAlignment="Center" Content="Введите номер кузова..." FontSize="16" Height="32" Canvas.Left="487" Canvas.Top="475" Width="213" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbBodyAddCar}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+        </Canvas>
+        <Canvas x:Name="FormChangeApplication" Visibility="Collapsed" HorizontalAlignment="Center" Height="690" Margin="-3,0,-3.4,0.4" VerticalAlignment="Center" Width="1360">
+            <Button Content="Назад" Height="42" Canvas.Left="35" Canvas.Top="27" Width="89" Click="ButtonClickCancelChange"/>
+            <Button x:Name="btnMainChange" Content="Ремонт" FontSize="18" Height="42" Canvas.Left="741" Canvas.Top="620" Width="195" Click="ButtonClickMainChange"/>
+            <Label x:Name="lbStatusChange" HorizontalContentAlignment="Center" Content="Статус: Диагностика" Height="36" Canvas.Left="479"  
+                   Canvas.Top="128" Width="376" FontSize="18" FontWeight="Bold"/>
+            <Label x:Name="lbIdChange" Content="Заявление №1" Height="50" Canvas.Left="479" Canvas.Top="74" Width="376"
+                   HorizontalContentAlignment="Center" FontSize="32" BorderThickness="0 0 0 2" BorderBrush="Black"/>
+            <Label x:Name="lbDateStartChange" Content="Дата оформления: 12.04.2022 12:32:00" Height="31" Canvas.Left="117" Canvas.Top="185" Width="380"
+                   FontSize="14" />
+            <Label x:Name="lbDateEndChange" Content="Дата завершения: Не указано" Height="29" Canvas.Left="117" Canvas.Top="205" Width="380" FontSize="14"/>
+            <Label x:Name="lbClientChange" Content="Клиент: Царегородцев Андрей Андреевич" Height="36" Canvas.Left="119" Canvas.Top="233" Width="526" 
+                   FontSize="18" />
+            <Label x:Name="lbTelephoneChange" Content="Телефон: 8(912) 373 51-92" Height="36" Canvas.Left="118" Canvas.Top="269" Width="572" 
+                   FontSize="18" />
+            <Label x:Name="lbCarChange" Content="Автомобиль: [Р123ОХ43] Мазда CX-5" Height="34" Canvas.Left="119" Canvas.Top="307" Width="526" 
+                   FontSize="18" />
+            <Label Content="Комментарий клиента:" Height="34" Canvas.Left="117" Canvas.Top="341" Width="210" 
+                   FontSize="18" Foreground="Gray"/>
+            <TextBox x:Name="tbCommentChange" Text="" IsReadOnly="True" Height="93" Canvas.Left="117" Canvas.Top="374" Width="526" 
+                   FontSize="18" TextWrapping="Wrap"/>
+            <Label x:Name="lbDiagnosticChange" Content="Неисправности:" Height="34" Canvas.Left="119" Canvas.Top="473" Width="526" 
+                FontSize="18" Foreground="Gray" />
+            <TextBox x:Name="tbDiagnisticChange" Visibility="Collapsed" IsReadOnly="True" Height="93" Canvas.Left="117" Canvas.Top="507" Width="526" 
+                FontSize="18" TextWrapping="Wrap"/>
+            <Label x:Name="lbWorkerChange" Visibility="Collapsed" Content="Механик: Оносов Петр Сергеевич" Height="36" Canvas.Left="741" Canvas.Top="169" Width="501" 
+                   FontSize="18" />
+            <Label x:Name="lbServiceChange" Visibility="Collapsed" Content="Перечень выполненых услуг:" Height="36" Canvas.Left="741" Canvas.Top="209" Width="470" 
+                FontSize="18" />
+            <DataGrid x:Name="dgServiceChange" AutoGenerateColumns="False" Visibility="Collapsed" Height="107" Canvas.Left="741" 
+                      Canvas.Top="243" Width="470" IsReadOnly="True" RowHeaderWidth="0" SelectionUnit="FullRow">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=Category}" Header="Категория"  MinWidth="120" MaxWidth="120" />
+                    <DataGridTextColumn Binding="{Binding Path=Name}" Header="Услуга"  MinWidth="250" MaxWidth="250" />
+                    <DataGridTextColumn Binding="{Binding Path=Price}" Header="Цена"  MinWidth="100" MaxWidth="100" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <Label x:Name="lbPriceChange" Visibility="Collapsed" Content="Стоимость услуг:     24 750 руб." Height="36" Canvas.Left="741" Canvas.Top="350" Width="470" 
+                FontSize="18" FontWeight="Bold"/>
+            <Label x:Name="lbPartChange" Visibility="Collapsed" Content="Перечень выданных запчастей:" Height="36" Canvas.Left="741" Canvas.Top="399" Width="470" 
+                FontSize="18" />
+            <Button x:Name="btnAddPartChange" Visibility="Collapsed" Content="Добавить" FontSize="12" Height="23" Canvas.Left="1075" Canvas.Top="406" Width="136" Click="btnAddPartChange_Click" />
+            <DataGrid x:Name="dgPartChange" AutoGenerateColumns="False" Visibility="Collapsed" Height="78" Canvas.Left="741" 
+                      Canvas.Top="440" Width="470" IsReadOnly="True" RowHeaderWidth="0" SelectionUnit="FullRow">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Path=Name}" Header="Запчасть"  MinWidth="270" MaxWidth="270" />
+                    <DataGridTextColumn Binding="{Binding Path=Quantity}" Header="Количество"  MinWidth="100" MaxWidth="100" />
+                    <DataGridTextColumn Binding="{Binding Path=Price}" Header="Цена"  MinWidth="100" MaxWidth="100" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <Label x:Name="lbPricePartChange" Visibility="Collapsed" Content="Стоимость запчастей:     10 000 руб." Height="36" Canvas.Left="741" Canvas.Top="523" Width="470" 
+                FontSize="18" FontWeight="Bold"/>
+            <Label x:Name="lbAllPricehange" Visibility="Collapsed" Content="Итого к оплате:     34 750 руб." Height="36" Canvas.Left="741" Canvas.Top="564" Width="470" 
+                FontSize="18" FontWeight="Bold"/>
+
+            <ComboBox x:Name="cbWorkerChange" Visibility="Collapsed" FontSize="12" VerticalContentAlignment="Center" 
+                      Height="36" Canvas.Left="708" Canvas.Top="210" Width="203" />
+            <Label x:Name="lbWorkChange" Visibility="Collapsed" IsHitTestVisible="False" FontSize="14" Content="Назначить механика: " 
+                   Height="30" Canvas.Left="708" Canvas.Top="180" Width="203" Foreground="Black" />
+        </Canvas>
+        <Canvas x:Name="FormAddPart" Visibility="Collapsed" HorizontalAlignment="Center" Height="690" Margin="-3,0,-3.4,0.4" VerticalAlignment="Center" Width="1360">
+            <Label Content="Добавление выданных запчастей" Height="49" Canvas.Left="479" Canvas.Top="110" Width="376"
+                   HorizontalContentAlignment="Center" FontSize="22" BorderThickness="0 0 0 2" BorderBrush="Black"/>
+            <Label Content="Запчасть" Height="27" Canvas.Left="478" Canvas.Top="177" Width="176"/>
+            <ComboBox x:Name="cbPart" HorizontalAlignment="Center" Height="32"  Text="" VerticalAlignment="Center" 
+                      VerticalContentAlignment="Center" Width="376" FontSize="16" BorderThickness="2px" Padding="11 0 0 0" 
+                      Canvas.Left="479" Canvas.Top="204" />
+            <Label Content="Количество" Height="27" Canvas.Left="478" Canvas.Top="244" Width="176"/>
+            <TextBox x:Name="tbQuantity" HorizontalAlignment="Center" Height="32" TextWrapping="Wrap" MaxLength="11"
+                Text="" VerticalAlignment="Center" VerticalContentAlignment="Center" Width="376" FontSize="16" 
+                BorderThickness="2px" Padding="11 0 0 0" Canvas.Left="479" Canvas.Top="271" PreviewTextInput="OnlyNumber"/>
+            <Label IsHitTestVisible="False" VerticalContentAlignment="Center" Content="Количество" FontSize="16" Height="32" Canvas.Left="487" Canvas.Top="271" Width="178" Foreground="#FFB1B1B1">
+                <Label.Style>
+                    <Style TargetType="{x:Type Label}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=tbQuantity}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Label.Style>
+            </Label>
+            <Button Content="Добавить" Height="42" Canvas.Left="572" Canvas.Top="334" Width="184" Click="ButtonClickAddPart"/>
+            <Button Content="Назад" Height="42" Canvas.Left="35" Canvas.Top="27" Width="89" Click="ButtonClickCancelAddPart"/>
+        </Canvas>
+    </Grid>
+</Window>
